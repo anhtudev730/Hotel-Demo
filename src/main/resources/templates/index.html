@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Trang chủ - ĐÀO HOA HOTEL</title>
+    <div th:replace="~{common/header :: header-css}"></div>
+    <style>
+        .room-card { transition: all 0.3s ease; }
+        .room-card:hover { transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important; }
+        .price-tag { font-size: 1.25rem; color: #e44d26; }
+    </style>
+</head>
+<body>
+    <div th:replace="~{common/navbar :: header}"></div>
+
+    <div class="container mt-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary">ĐÀO HOA HOTEL</h1>
+            <p class="lead text-muted">Trải nghiệm không gian nghỉ dưỡng tuyệt vời tại Quy Nhơn</p>
+            <div class="text-center">
+                <span class="badge bg-primary px-3">Chào mừng bạn quay trở lại!</span>
+            </div>
+            <hr class="w-25 mx-auto mt-4">
+        </div>
+
+        <div class="row">
+            <div th:each="room : ${rooms}" class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm room-card border-0">
+                    <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=500" 
+                         class="card-img-top" alt="Room Image" style="height: 200px; object-fit: cover;">
+                    
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title mb-0 fw-bold" th:text="'Phòng ' + ${room.roomNumber}"></h5>
+                            <span class="badge bg-success" th:text="${room.roomType?.name}"></span>
+                        </div>
+                        
+                        <p class="card-text text-muted small flex-grow-1" th:text="${room.roomType?.description}"></p>
+                        
+                        <div class="mt-3">
+                            <p class="mb-1 small text-muted text-uppercase fw-bold">Giá mỗi đêm</p>
+                            <h5 class="price-tag fw-bold mb-3" 
+                                th:text="${#numbers.formatDecimal(room.roomType?.pricePerNight, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></h5>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <a th:href="@{/booking/{id}(id=${room.id})}" class="btn btn-primary fw-bold py-2">
+                                <i class="bi bi-calendar-check"></i> ĐẶT NGAY
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

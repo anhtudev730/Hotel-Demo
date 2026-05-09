@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thêm loại phòng mới</title>
+    <div th:replace="~{common/header :: header-css}"></div>
+</head>
+<body>
+    <div th:replace="~{common/navbar :: header}"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <!-- Dùng th:text để tiêu đề tự đổi giữa "Thêm" và "Sửa" -->
+                        <h4 class="mb-0" th:text="${roomType.id == null ? 'Thêm Loại Phòng Mới' : 'Chỉnh Sửa Loại Phòng'}"></h4>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/manager/room-types/save}" th:object="${roomType}" method="POST">
+                            
+                            <!-- DÒNG QUAN TRỌNG NHẤT: Lưu trữ ID ẩn để Spring biết đây là lệnh Update -->
+                            <input type="hidden" th:field="*{id}" />
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Tên loại phòng:</label>
+                                <input type="text" th:field="*{name}" class="form-control" placeholder="Ví dụ: Deluxe, VIP Double" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Mô tả:</label>
+                                <textarea th:field="*{description}" class="form-control" rows="3" placeholder="Nhập mô tả ngắn..."></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Sức chứa (Người):</label>
+                                    <input type="number" th:field="*{capacity}" class="form-control" min="1" required />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Giá mỗi đêm (VNĐ):</label>
+                                    <input type="number" th:field="*{pricePerNight}" class="form-control" step="1000" required />
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success">Lưu Loại Phòng</button>
+                                <a href="/manager/room-types" class="btn btn-outline-secondary">Hủy bỏ</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

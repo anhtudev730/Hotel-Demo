@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cấu hình phòng</title>
+    <div th:replace="~{common/header :: header-css}"></div>
+</head>
+<body>
+    <div th:replace="~{common/navbar :: header}"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-primary text-white text-center py-3">
+                        <!-- Tiêu đề tự động thay đổi dựa trên trạng thái của ID -->
+                        <h4 class="mb-0" th:text="${room.id == null ? 'Thêm Phòng Mới' : 'Chỉnh Sửa Thông Tin Phòng'}"></h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <form th:action="@{/manager/rooms/save}" th:object="${room}" method="POST">
+                            
+                            <!-- BỔ SUNG QUAN TRỌNG: Thẻ ẩn để lưu ID khi thực hiện Sửa (Update) -->
+                            <input type="hidden" th:field="*{id}" />
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-secondary">Số phòng:</label>
+                                <input type="text" th:field="*{roomNumber}" class="form-control form-control-lg border-primary" placeholder="Ví dụ: P.101" required />
+                                <div class="form-text">Nhập số phòng kèm tiền tố nếu cần.</div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-secondary">Chọn loại phòng:</label>
+                                <select th:field="*{roomType}" class="form-select border-primary" required>
+                                    <option value="">-- Click để chọn --</option>
+                                    <option th:each="type : ${roomTypes}" 
+                                            th:value="${type.id}" 
+                                            th:text="${type.name} + ' (' + ${#numbers.formatDecimal(type.pricePerNight, 0, 'COMMA', 0, 'POINT')} + ' đ)'">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg shadow-sm">Xác Nhận Lưu</button>
+                                <a href="/manager/rooms" class="btn btn-light border">Quay lại danh sách</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

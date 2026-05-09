@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Quản lý người dùng - ĐÀO HOA HOTEL</title>
+    <div th:replace="~{common/header :: header-css}"></div>
+</head>
+<body>
+    <div th:replace="~{common/navbar :: header}"></div>
+
+    <div class="container mt-4">
+        <div class="card shadow border-0">
+            <!-- CẬP NHẬT HEADER: Thêm Form tìm kiếm -->
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0"><i class="bi bi-people-fill"></i> DANH SÁCH NGƯỜI DÙNG</h5>
+                
+                <form th:action="@{/manager/users}" method="get" class="d-flex" style="max-width: 350px;">
+                    <div class="input-group">
+                        <input type="text" name="keyword" th:value="${keyword}" 
+                               class="form-control form-control-sm" 
+                               placeholder="Tìm tên hoặc email...">
+                        <button class="btn btn-light btn-sm" type="submit">
+                            <i class="bi bi-search text-primary"></i>
+                        </button>
+                        <!-- Nút X để xóa nhanh tìm kiếm -->
+                        <a th:if="${keyword}" th:href="@{/manager/users}" class="btn btn-light btn-sm border-start">
+                            <i class="bi bi-x-lg text-danger"></i>
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card-body">
+                <!-- Thông báo cập nhật -->
+                <div th:if="${param.updated}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    Cập nhật quyền hạn thành công!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <!-- Thông báo khi không tìm thấy kết quả -->
+                <div th:if="${#lists.isEmpty(users)}" class="alert alert-warning text-center">
+                    Không tìm thấy người dùng nào phù hợp với từ khóa: <strong th:text="${keyword}"></strong>
+                </div>
+
+                <table class="table table-hover align-middle" th:if="${!#lists.isEmpty(users)}">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th style="width: 250px;">Quyền hạn</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.id}"></td>
+                            <td class="fw-bold" th:text="${user.username}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td>
+                                <form th:action="@{/manager/users/update-role/{id}(id=${user.id})}" method="post" class="d-flex align-items-center">
+                                    <select name="role" class="form-select form-select-sm me-2">
+                                        <option value="ROLE_USER" th:selected="${user.role == 'ROLE_USER'}">Người dùng (USER)</option>
+                                        <option value="ROLE_ADMIN" th:selected="${user.role == 'ROLE_ADMIN'}">Quản trị viên (ADMIN)</option>
+                                    </select>
+                                    <button th:if="${#authentication.name != user.username}" 
+                                            type="submit" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-save"></i>
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form th:if="${#authentication.name != user.username}" 
+                                      th:action="@{/manager/users/delete/{id}(id=${user.id})}" method="post"
+                                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa người dùng này?')">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </button>
+                                </form>
+                                <span th:if="${#authentication.name == user.username}" class="badge bg-secondary">Đang đăng nhập</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
