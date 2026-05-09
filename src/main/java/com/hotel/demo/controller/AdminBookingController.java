@@ -41,4 +41,6 @@ public class AdminBookingController {
         bookingService.cancelBooking(id);
         return "redirect:/manager/bookings/list?cancelled";
     }
+    
+    // Học git cơ bản.
 }
