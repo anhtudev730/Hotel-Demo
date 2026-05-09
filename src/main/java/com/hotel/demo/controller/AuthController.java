@@ -92,4 +92,6 @@ public class AuthController {
         model.addAttribute("success", "Chúc mừng! Bạn đã đổi mật khẩu thành công.");
         return "change-password";
     }
+    
+    // Học git cơ bản 3
 }

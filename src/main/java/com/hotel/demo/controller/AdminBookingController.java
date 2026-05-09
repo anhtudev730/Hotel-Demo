@@ -40,8 +40,5 @@ public class AdminBookingController {
     public String cancel(@PathVariable Long id) {
         bookingService.cancelBooking(id);
         return "redirect:/manager/bookings/list?cancelled";
-    }
-    
-    // Học git cơ bản.
-    // Học git cơ bản 2
+    } 
 }
