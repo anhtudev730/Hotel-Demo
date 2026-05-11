@@ -12,8 +12,7 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     
     // Tìm các đơn đặt phòng của một User cụ thể
-    List<Booking> findByUserUsername(String username);
-
+	List<Booking> findByUserUsername(String username);
     // LOGIC: Kiểm tra xem phòng có bị bận trong khoảng thời gian khách chọn không
     @Query("SELECT COUNT(b) > 0 FROM Booking b " +
            "WHERE b.room.id = :roomId " +
@@ -22,4 +21,20 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     boolean isRoomOccupied(@Param("roomId") Long roomId, 
                           @Param("checkIn") LocalDate checkIn, 
                           @Param("checkOut") LocalDate checkOut);
+   
+    
+ // 1. Tính tổng doanh thu
+    @Query("SELECT SUM(b.totalPrice) FROM Booking b WHERE b.status = 'CONFIRMED'")
+    Double getTotalRevenue();
+
+    // 2. Đếm tổng số đơn hàng
+    @Query("SELECT COUNT(b) FROM Booking b")
+    long countTotalBookings();
+
+    // 3. Đếm đơn hàng đang chờ xử lý (Sửa lỗi dòng 114 của bạn)
+    @Query("SELECT COUNT(b) FROM Booking b WHERE b.status = 'PENDING'")
+    long countPendingBookings();
+
+    // 4. Lấy 5 đơn mới nhất (Sửa lỗi dòng 120 của bạn)
+    List<Booking> findTop5ByOrderByIdDesc();
 }
