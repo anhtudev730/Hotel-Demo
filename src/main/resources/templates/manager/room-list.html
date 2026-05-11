@@ -2,17 +2,38 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Quản lý danh sách phòng</title>
-    <!-- 1. Nhúng Header CSS và Bootstrap từ file dùng chung -->
     <div th:replace="~{common/header :: header-css}"></div>
 </head>
 <body>
-    <!-- 2. Nhúng Thanh điều hướng (Navbar) -->
-    <div th:replace="~{common/navbar :: header	}"></div>
+    <div th:replace="~{common/navbar :: header}"></div>
 
     <div class="container mt-4">
+        
+        <div class="card shadow-sm mb-4 border-0">
+            <div class="card-body bg-light rounded">
+                <h5 class="mb-3 text-primary"><i class="bi bi-calendar-event"></i> Tìm kiếm phòng theo thời gian</h5>
+                <form th:action="@{/rooms/search-available}" method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold small">Ngày nhận phòng</label>
+                        <input type="date" name="checkIn" class="form-control" th:value="${checkIn}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold small">Ngày trả phòng</label>
+                        <input type="date" name="checkOut" class="form-control" th:value="${checkOut}" required>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm">
+                            <i class="bi bi-search"></i> Kiểm tra phòng trống
+                        </a>
+                    </div>
+                </form>
+                <div th:if="${error}" class="alert alert-danger mt-3 mb-0 py-2 small" th:text="${error}"></div>
+            </div>
+        </div>
+
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">Danh sách các phòng hiện có</h4>
+                <h4 class="mb-0">Kết quả phòng hiện có</h4>
                 <a href="/manager/rooms/add" class="btn btn-light btn-sm fw-bold">
                     + Thêm phòng mới
                 </a>
@@ -28,12 +49,10 @@
                                 <th>Loại phòng</th>
                                 <th class="text-end">Giá/Đêm</th>
                                 <th class="text-center">Sức chứa</th>
-                                <!-- BỔ SUNG: Cột Thao tác -->
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Duyệt qua danh sách rooms từ Controller -->
                             <tr th:each="room : ${rooms}">
                                 <td th:text="${room.id}"></td>
                                 <td>
@@ -48,19 +67,22 @@
                                           th:text="${room.roomType.capacity} + ' người'">
                                     </span>
                                 </td>
-                                <!-- BỔ SUNG: Hai nút Sửa và Xóa -->
                                 <td class="text-center">
                                     <div class="btn-group">
+                                        <a th:href="@{/booking/{id}(id=${room.id})}" 
+                                           class="btn btn-sm btn-success fw-bold px-3">
+                                            Đặt ngay
+                                        </a>
                                         <a th:href="@{/manager/rooms/edit/{id}(id=${room.id})}" 
                                            class="btn btn-sm btn-outline-info">
                                             Sửa
                                         </a>
-                                        <a th:href="@{/manager/rooms/delete/{id}(id=${room.id})}" 
-                                           class="btn btn-sm btn-outline-danger"
-                                           onclick="return confirm('Anh Tú có chắc chắn muốn xóa phòng này không?')">
-                                            Xóa
-                                        </a>
                                     </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${rooms.isEmpty()}">
+                                <td colspan="6" class="text-center py-4 text-muted">
+                                    Không tìm thấy phòng trống nào trong khoảng thời gian này!
                                 </td>
                             </tr>
                         </tbody>
@@ -70,7 +92,6 @@
         </div>
     </div>
 
-    <!-- Nhúng thư viện JS của Bootstrap để các hiệu ứng hoạt động -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

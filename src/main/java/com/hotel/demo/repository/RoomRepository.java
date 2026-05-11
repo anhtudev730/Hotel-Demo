@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.List;
-
+import java.time.LocalDate;
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
@@ -24,4 +24,13 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
                             @Param("typeId") Long typeId, 
                             @Param("minPrice") Double minPrice, 
                             @Param("maxPrice") Double maxPrice);
+    
+    @Query("SELECT r FROM Room r WHERE r.id NOT IN (" +
+    	       "SELECT b.room.id FROM Booking b WHERE b.status != 'CANCELLED' AND (" +
+    	       "(:checkIn BETWEEN b.checkInDate AND b.checkOutDate) OR " +
+    	       "(:checkOut BETWEEN b.checkInDate AND b.checkOutDate) OR " +
+    	       "(b.checkInDate BETWEEN :checkIn AND :checkOut)" +
+    	       "))")
+    	List<Room> findAvailableRooms(@Param("checkIn") LocalDate checkIn, 
+    	                              @Param("checkOut") LocalDate checkOut);
 }
