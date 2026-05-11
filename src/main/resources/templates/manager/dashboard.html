@@ -24,25 +24,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between small">
-                        <a class="text-white stretched-link" href="/manager/rooms">Xem chi tiết</a>
-                        <i class="bi bi-chevron-right"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 mb-4">
-                <div class="card bg-success text-white shadow border-0">
-                    <div class="card-body py-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase mb-1">Số Loại Phòng</h6>
-                                <h2 class="display-5 fw-bold" th:text="${totalRoomTypes}">0</h2>
-                            </div>
-                            <i class="bi bi-tags fs-1 opacity-50"></i>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex align-items-center justify-content-between small">
-                        <a class="text-white stretched-link" href="/manager/room-types">Xem chi tiết</a>
+                        <a class="text-white stretched-link" th:href="@{/manager/rooms}">Xem chi tiết</a>
                         <i class="bi bi-chevron-right"></i>
                     </div>
                 </div>
@@ -54,14 +36,32 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="text-uppercase mb-1">Đơn Đặt Phòng</h6>
-                                <h2 class="display-5 fw-bold">List</h2>
+                                <h2 class="display-5 fw-bold" th:text="${totalBookings}">0</h2>
                             </div>
                             <i class="bi bi-calendar-check fs-1 opacity-50"></i>
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between small">
-                        <a class="text-white stretched-link" href="/manager/bookings/list">Duyệt Đơn Ngay</a>
+                        <a class="text-white stretched-link" th:href="@{/manager/bookings/list}">Duyệt Đơn Ngay (<span th:text="${pendingBookings}">0</span> chờ)</a>
                         <i class="bi bi-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-4">
+                <div class="card bg-success text-white shadow border-0">
+                    <div class="card-body py-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase mb-1">Doanh Thu Thực</h6>
+                                <h2 class="fs-4 fw-bold" th:text="${#numbers.formatDecimal(totalRevenue, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</h2>
+                            </div>
+                            <i class="bi bi-currency-dollar fs-1 opacity-50"></i>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between small">
+                        <span class="text-white">Tổng đơn đã xác nhận</span>
+                        <i class="bi bi-check-circle"></i>
                     </div>
                 </div>
             </div>
@@ -71,29 +71,62 @@
                     <div class="card-body py-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="text-uppercase mb-1">Giá trị Loại Phòng</h6>
-                                <h2 class="fs-4 fw-bold" th:text="${#numbers.formatDecimal(potentialRevenue, 0, 'COMMA', 0, 'POINT')} + ' đ'"></h2>
+                                <h6 class="text-uppercase mb-1">Khách Hàng</h6>
+                                <h2 class="display-5 fw-bold" th:text="${totalUsers}">0</h2>
                             </div>
-                            <i class="bi bi-currency-dollar fs-1 opacity-50"></i>
+                            <i class="bi bi-people fs-1 opacity-50"></i>
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between small">
-                        <span class="text-dark">Tổng giá niêm yết</span>
-                        <i class="bi bi-graph-up-arrow"></i>
+                        <a class="text-dark stretched-link" th:href="@{/manager/users}">Quản lý khách</a>
+                        <i class="bi bi-chevron-right"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row mt-2">
+        <div class="row mt-2 mb-4">
             <div class="col-12">
                 <div class="card border-0 shadow-sm p-4 text-center bg-light">
-                    <h4>Chào Anh Tú, hôm nay bạn muốn làm gì?</h4>
+                    <h4 class="fw-bold text-dark">Chào Anh Tú, hôm nay bạn muốn làm gì?</h4>
                     <div class="mt-3">
-                        <a href="/manager/rooms/add" class="btn btn-outline-primary mx-2 mb-2"><i class="bi bi-plus-circle"></i> Thêm Phòng Mới</a>
-                        <a href="/manager/room-types/add" class="btn btn-outline-success mx-2 mb-2"><i class="bi bi-plus-square"></i> Thêm Loại Phòng</a>
-                        <a href="/manager/bookings/list" class="btn btn-outline-info mx-2 mb-2"><i class="bi bi-clipboard-check"></i> Phê Duyệt Đặt Phòng</a>
+                        <a th:href="@{/manager/rooms/add}" class="btn btn-primary mx-2 mb-2 px-4 shadow-sm"><i class="bi bi-plus-circle"></i> Thêm Phòng Mới</a>
+                        <a th:href="@{/manager/room-types/add}" class="btn btn-success mx-2 mb-2 px-4 shadow-sm"><i class="bi bi-plus-square"></i> Thêm Loại Phòng</a>
+                        <a th:href="@{/manager/bookings/list}" class="btn btn-info text-white mx-2 mb-2 px-4 shadow-sm"><i class="bi bi-clipboard-check"></i> Phê Duyệt Đặt Phòng</a>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="bi bi-lightning-charge"></i> Đơn hàng vừa đặt</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="ps-3">Mã đơn</th>
+                                <th>Khách hàng</th>
+                                <th>Check-in</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="booking : ${recentBookings}">
+                                <td class="ps-3 fw-bold" th:text="'#' + ${booking.id}"></td>
+                                <td th:text="${booking.user.username}"></td>
+                                <td th:text="${booking.checkInDate}"></td>
+                                <td class="text-danger fw-bold" th:text="${#numbers.formatDecimal(booking.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'"></td>
+                                <td>
+                                    <span th:if="${booking.status == 'PENDING'}" class="badge bg-warning text-dark">Chờ duyệt</span>
+                                    <span th:if="${booking.status == 'CONFIRMED'}" class="badge bg-success">Thành công</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
